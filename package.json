@@ -20,6 +20,7 @@
     "@strapi/plugin-users-permissions": "5.12.3",
     "@strapi/strapi": "5.12.3",
     "better-sqlite3": "11.3.0",
+    "dotenv": "^16.5.0",
     "fs-extra": "^10.0.0",
     "mime-types": "^2.1.27",
     "react": "^18.0.0",
@@ -31,6 +32,7 @@
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
+    "playwright": "^1.51.1",
     "typescript": "^5"
   },
   "engines": {
