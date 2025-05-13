@@ -9,24 +9,23 @@ test.beforeEach(async ({ page }) => {
   await page.goto('about:blank');
 });
 
-test('Deve criar uma nova categoria', async ({ page }) => {
+test('Deve criar um novo autor', async ({ page }) => {
   test.setTimeout(10000);
 
   await loginAsAdmin(page);
 
   await page.click('a[aria-label="Content Manager"]');
-  await page.getByRole('link', { name: 'Categoria' }).click();
+  await page.getByRole('link', { name: 'Autor' }).click();
 
   await page.click('text=Create new entry');
-  await page.fill('input[name="name"]', 'Categoria Teste');
-  await page.click('button:has-text("Regenerate")');
-  await page.fill('textarea[name="description"]', 'Descrição teste.');
+  await page.fill('input[name="name"]', 'Nome Teste');
+  await page.fill('input[name="email"]', 'teste@email.com');
 
   await page.click('button:has-text("Save")');
 
   await page.click('text=Back');
 
-  const categoriaNome = await page.textContent('table tbody tr:last-of-type td:nth-of-type(3)');
-  expect(categoriaNome).toContain('Categoria Teste');
+  const autorNome = await page.textContent('table tbody tr:last-of-type td:nth-of-type(3)');
+  expect(autorNome).toContain('Nome Teste');
 
 });
