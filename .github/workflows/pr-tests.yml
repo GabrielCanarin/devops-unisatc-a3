@@ -1,0 +1,59 @@
+name: Run Playwright Tests on PR
+
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Install Playwright Browsers
+        run: npx playwright install
+
+      - name: Criar .env com variáveis dos secrets
+        run: |
+          echo "HOST=0.0.0.0" >> .env
+          echo "PORT=1337" >> .env
+          echo "APP_KEYS=${{ secrets.APP_KEYS }}" >> .env
+          echo "API_TOKEN_SALT=${{ secrets.API_TOKEN_SALT }}" >> .env
+          echo "ADMIN_JWT_SECRET=${{ secrets.ADMIN_JWT_SECRET }}" >> .env
+          echo "TRANSFER_TOKEN_SALT=${{ secrets.TRANSFER_TOKEN_SALT }}" >> .env
+          echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> .env
+          echo "ADMIN_EMAIL=${{ secrets.ADMIN_EMAIL }}" >> .env
+          echo "ADMIN_PASSWORD=${{ secrets.ADMIN_PASSWORD }}" >> .env
+          echo "EDITOR_EMAIL=${{ secrets.EDITOR_EMAIL }}" >> .env
+          echo "EDITOR_PASSWORD=${{ secrets.EDITOR_PASSWORD }}" >> .env
+          echo "AUTHOR_EMAIL=${{ secrets.AUTHOR_EMAIL }}" >> .env
+          echo "AUTHOR_PASSWORD=${{ secrets.AUTHOR_PASSWORD }}" >> .env
+          echo "DATABASE_CLIENT=sqlite" >> .env
+          echo "DATABASE_HOST=" >> .env
+          echo "DATABASE_PORT=" >> .env
+          echo "DATABASE_NAME=" >> .env
+          echo "DATABASE_USERNAME=" >> .env
+          echo "DATABASE_PASSWORD=" >> .env
+          echo "DATABASE_SSL=false" >> .env
+          echo "DATABASE_FILENAME=.tmp/data.db" >> .env
+
+      - name: Build Strapi
+        run: pnpm dev
+
+      - name: Start Strapi in background
+        run: |
+          nohup npm run develop > strapi.log 2>&1 &
+          npx wait-on http://localhost:1337
+
+      - name: Run Playwright tests
+        run: npx playwright test
