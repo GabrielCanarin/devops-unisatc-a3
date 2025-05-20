@@ -27,6 +27,6 @@ test('Deve criar uma nova categoria', async ({ page }) => {
   await page.click('text=Back');
 
   const categoriaNome = await page.textContent('table tbody tr:last-of-type td:nth-of-type(3)');
-  expect(categoriaNome).toContain('Categoria Teste');
+  expect(categoriaNome).toContain('erro teste');
 
 });
