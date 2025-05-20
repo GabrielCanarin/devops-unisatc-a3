@@ -1,8 +1,12 @@
-name: Run Playwright Tests on PR
+name: Run Playwright Tests on Push
 
 on:
   push:
-    branches: master
+    branches:
+      - '**'
+  pull_request:
+    branches:
+      - '**'
 
 jobs:
   test:
@@ -17,11 +21,11 @@ jobs:
         with:
           node-version: 18
 
-      - name: Install dependencies
-        run: npm install
-
-      - name: Install strapi
+      - name: Install pnpm
         run: npm install -g pnpm@latest-10
+
+      - name: Install dependencies
+        run: pnpm install
 
       - name: Install Playwright Browsers
         run: npx playwright install
@@ -42,21 +46,13 @@ jobs:
           echo "AUTHOR_EMAIL=${{ secrets.AUTHOR_EMAIL }}" >> .env
           echo "AUTHOR_PASSWORD=${{ secrets.AUTHOR_PASSWORD }}" >> .env
           echo "DATABASE_CLIENT=sqlite" >> .env
-          echo "DATABASE_HOST=" >> .env
-          echo "DATABASE_PORT=" >> .env
-          echo "DATABASE_NAME=" >> .env
-          echo "DATABASE_USERNAME=" >> .env
-          echo "DATABASE_PASSWORD=" >> .env
-          echo "DATABASE_SSL=false" >> .env
           echo "DATABASE_FILENAME=.tmp/data.db" >> .env
 
       - name: Build Strapi
-        run: pnpm dev
+        run: pnpm build
 
-      - name: Start Strapi in background
+      - name: Start Strapi and run tests
         run: |
-          nohup npm run develop > strapi.log 2>&1 &
+          pnpm start & 
           npx wait-on http://localhost:1337
-
-      - name: Run Playwright tests
-        run: npx playwright test
+          npx playwright test
