@@ -23,7 +23,7 @@ test('Deve criar uma nova categoria', async ({ page }) => {
   await page.fill('textarea[name="description"]', 'Descrição teste.');
 
   await page.click('button:has-text("Save")');
-
+  await page.waitForTimeout(1000);
   await page.click('text=Back');
 
   const categoriaNome = await page.textContent('table tbody tr:last-of-type td:nth-of-type(3)');

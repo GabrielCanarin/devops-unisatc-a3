@@ -22,7 +22,7 @@ test('Deve criar um novo autor', async ({ page }) => {
   await page.fill('input[name="email"]', 'teste@email.com');
 
   await page.click('button:has-text("Save")');
-
+  await page.waitForTimeout(1000);
   await page.click('text=Back');
 
   const autorNome = await page.textContent('table tbody tr:last-of-type td:nth-of-type(3)');

@@ -26,12 +26,29 @@
     "src/**/*.json"
   ],
 
+  "watchIgnoreFiles":[
+    // Ignore the build folder
+    "build",
+    // Ignore the dist folder
+    "dist",
+    // Ignore the .cache folder
+    ".cache",
+    // Ignore the .tmp folder
+    ".tmp",
+    // Ignore the playwright-report folder
+    "playwright-report",
+    // Ignore the test-results folder
+    "test-results"
+  ],
+
   "exclude": [
     "node_modules/",
     "build/",
     "dist/",
     ".cache/",
     ".tmp/",
+    "playwright-report/",
+    "test-results/",
 
     // Do not include admin files in the server compilation
     "src/admin/",
