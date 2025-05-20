@@ -21,11 +21,11 @@ jobs:
         with:
           node-version: 18
 
+      - name: Install dependencies
+        run: npm install
+
       - name: Install pnpm
         run: npm install -g pnpm@latest-10
-
-      - name: Install dependencies
-        run: pnpm install
 
       - name: Install Playwright Browsers
         run: npx playwright install
