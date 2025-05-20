@@ -51,8 +51,18 @@ jobs:
       - name: Build Strapi
         run: pnpm build
 
-      - name: Start Strapi and run tests
+      - name: Start Strapi in background
         run: |
-          pnpm start & 
-          npx wait-on http://localhost:1337
-          npx playwright test
+          pnpm start &
+          echo $! > strapi_pid.txt
+
+      - name: Esperar Strapi iniciar
+        run: npx wait-on http://localhost:1337
+
+      - name: Run Playwright tests
+        run: npx playwright test
+
+      - name: Parar Strapi
+        if: always()
+        run: |
+          kill $(cat strapi_pid.txt) || echo "Strapi já finalizado"
