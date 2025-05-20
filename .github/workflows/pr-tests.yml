@@ -55,9 +55,7 @@ jobs:
         run: |
           pnpm start &
           echo $! > strapi_pid.txt
-
-      - name: Esperar Strapi iniciar
-        run: npx wait-on http://localhost:1337
+          sleep 10
 
       - name: Run Playwright tests
         run: npx playwright test
