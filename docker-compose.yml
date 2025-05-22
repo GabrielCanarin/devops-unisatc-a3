@@ -1,0 +1,45 @@
+volumes:
+  node_modules:
+  node_modules_staging:
+
+services:
+  # ----------------------------------------------------------------------------
+  # Production environment
+  # ----------------------------------------------------------------------------
+  strapi: &strapi
+    image: node:20
+    container_name: strapi
+    command: sh -c "npm clean-install && npm run develop"
+    restart: unless-stopped
+    working_dir: /app
+    env_file: .env
+    environment:
+      NODE_ENV: development
+      API_TOKEN_SALT: ${API_TOKEN_SALT:-X2d0C6rgXwWgwEZCslZN0A}$
+      TRANSFER_TOKEN_SALT: ${TRANSFER_TOKEN_SALT:-vhsZEWfU3anLONbLZXZfqg}$
+    ports:
+      - "1337:1337"
+    volumes:
+      - .:/app
+      - node_modules:/app/node_modules
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "http://localhost:1337/admin"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  # ----------------------------------------------------------------------------
+  # Staging environment
+  # ----------------------------------------------------------------------------
+  strapi_staging:
+    <<: *strapi
+    container_name: strapi-staging
+    environment:
+      NODE_ENV: development
+      API_TOKEN_SALT: ${API_TOKEN_SALT:-X2d0C6rgXwWgwEZCslZN0A}$
+      TRANSFER_TOKEN_SALT: ${TRANSFER_TOKEN_SALT:-vhsZEWfU3anLONbLZXZfqg}$
+    ports:
+      - "1338:1337"
+    volumes:
+      - .:/app
+      - node_modules_staging:/app/node_modules
