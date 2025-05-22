@@ -2,7 +2,7 @@ name: Deploy Strapi Docker
 
 on:
   workflow_run:
-    workflows: ["tests"]
+    workflows: ["test"]
     types:
       - completed
 
