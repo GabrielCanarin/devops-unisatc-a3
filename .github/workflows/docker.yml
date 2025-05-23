@@ -2,7 +2,7 @@ name: Deploy Strapi Docker
 
 on:
   workflow_run:
-    workflows: ["test"]
+    workflows: ["Run Playwright Tests on Push"]
     types:
       - completed
 
